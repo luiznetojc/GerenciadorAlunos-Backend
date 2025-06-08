@@ -27,6 +27,13 @@ public class EnrollmentController : ControllerBase
 		return Ok(item);
 	}
 
+	[HttpGet("student/{studentId}")]
+	public async Task<ActionResult<IEnumerable<EnrollmentResponseDto>>> GetByStudentId(int studentId)
+	{
+		var items = await _service.GetByStudentIdAsync(studentId);
+		return Ok(items);
+	}
+
 	[HttpPost]
 	public async Task<ActionResult<EnrollmentResponseDto>> Create(EnrollmentRequestDto enrollment)
 	{

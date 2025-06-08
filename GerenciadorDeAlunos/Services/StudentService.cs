@@ -43,7 +43,7 @@ public class StudentService : IStudentService
 		{
 			RegistrationNumber = student.RegistrationNumber,
 			FullName = student.FullName,
-			EnrollmentDate = student.EnrollmentDate
+			EnrollmentDate = DateTime.Parse(student.EnrollmentDate).ToUniversalTime()
 		};
 		var created = await _repository.AddAsync(entity);
 		return new StudentResponseDto
@@ -61,7 +61,7 @@ public class StudentService : IStudentService
 		if (entity == null) return false;
 		entity.RegistrationNumber = student.RegistrationNumber;
 		entity.FullName = student.FullName;
-		entity.EnrollmentDate = student.EnrollmentDate;
+		entity.EnrollmentDate = DateTime.Parse(student.EnrollmentDate).ToUniversalTime();
 		await _repository.UpdateAsync(entity);
 		return true;
 	}

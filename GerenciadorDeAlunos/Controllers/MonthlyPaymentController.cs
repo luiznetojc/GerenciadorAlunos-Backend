@@ -27,6 +27,21 @@ public class MonthlyPaymentController : ControllerBase
 		return Ok(item);
 	}
 
+	[HttpGet("student/{studentId}")]
+	public async Task<ActionResult<IEnumerable<MonthlyPaymentResponseDto>>> GetByStudentId(int studentId)
+	{
+		var items = await _service.GetByStudentIdAsync(studentId);
+		return Ok(items);
+	}
+
+	[HttpGet("student/{studentId}/month/{year}/{month}")]
+	public async Task<ActionResult<MonthlyPaymentResponseDto>> GetByStudentAndMonth(int studentId, int year, int month)
+	{
+		var item = await _service.GetByStudentAndMonthAsync(studentId, year, month);
+		if (item == null) return NotFound();
+		return Ok(item);
+	}
+
 	[HttpPost]
 	public async Task<ActionResult<MonthlyPaymentResponseDto>> Create(MonthlyPaymentRequestDto payment)
 	{

@@ -27,6 +27,13 @@ public class MonthlyPaymentDetailController : ControllerBase
 		return Ok(item);
 	}
 
+	[HttpGet("payment/{monthlyPaymentId}")]
+	public async Task<ActionResult<IEnumerable<MonthlyPaymentDetailResponseDto>>> GetByMonthlyPaymentId(int monthlyPaymentId)
+	{
+		var items = await _service.GetByMonthlyPaymentIdAsync(monthlyPaymentId);
+		return Ok(items);
+	}
+
 	[HttpPost]
 	public async Task<ActionResult<MonthlyPaymentDetailResponseDto>> Create(MonthlyPaymentDetailRequestDto detail)
 	{

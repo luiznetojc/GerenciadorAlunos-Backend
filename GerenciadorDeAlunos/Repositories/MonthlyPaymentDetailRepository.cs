@@ -10,6 +10,8 @@ public class MonthlyPaymentDetailRepository : IMonthlyPaymentDetailRepository
 
 	public async Task<IEnumerable<MonthlyPaymentDetail>> GetAllAsync() => await _context.MonthlyPaymentDetails.ToListAsync();
 	public async Task<MonthlyPaymentDetail?> GetByIdAsync(int id) => await _context.MonthlyPaymentDetails.FindAsync(id);
+	public async Task<IEnumerable<MonthlyPaymentDetail>> GetByMonthlyPaymentIdAsync(int monthlyPaymentId) =>
+		await _context.MonthlyPaymentDetails.Where(mpd => mpd.MonthlyPaymentId == monthlyPaymentId).ToListAsync();
 	public async Task<MonthlyPaymentDetail> AddAsync(MonthlyPaymentDetail detail)
 	{
 		_context.MonthlyPaymentDetails.Add(detail);

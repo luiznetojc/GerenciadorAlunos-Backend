@@ -40,6 +40,37 @@ public class MonthlyPaymentService : IMonthlyPaymentService
 		};
 	}
 
+	public async Task<IEnumerable<MonthlyPaymentResponseDto>> GetByStudentIdAsync(int studentId)
+	{
+		var items = await _repository.GetByStudentIdAsync(studentId);
+		return items.Select(mp => new MonthlyPaymentResponseDto
+		{
+			Id = mp.Id,
+			StudentId = mp.StudentId,
+			Year = mp.Year,
+			Month = mp.Month,
+			TotalAmount = mp.TotalAmount,
+			IsPaid = mp.IsPaid,
+			PaymentDate = mp.PaymentDate
+		});
+	}
+
+	public async Task<MonthlyPaymentResponseDto?> GetByStudentAndMonthAsync(int studentId, int year, int month)
+	{
+		var mp = await _repository.GetByStudentAndMonthAsync(studentId, year, month);
+		if (mp == null) return null;
+		return new MonthlyPaymentResponseDto
+		{
+			Id = mp.Id,
+			StudentId = mp.StudentId,
+			Year = mp.Year,
+			Month = mp.Month,
+			TotalAmount = mp.TotalAmount,
+			IsPaid = mp.IsPaid,
+			PaymentDate = mp.PaymentDate
+		};
+	}
+
 	public async Task<MonthlyPaymentResponseDto> AddAsync(MonthlyPaymentRequestDto payment)
 	{
 		var entity = new MonthlyPayment

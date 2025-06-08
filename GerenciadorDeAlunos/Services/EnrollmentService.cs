@@ -34,6 +34,18 @@ public class EnrollmentService : IEnrollmentService
 		};
 	}
 
+	public async Task<IEnumerable<EnrollmentResponseDto>> GetByStudentIdAsync(int studentId)
+	{
+		var items = await _repository.GetByStudentIdAsync(studentId);
+		return items.Select(e => new EnrollmentResponseDto
+		{
+			Id = e.Id,
+			StudentId = e.StudentId,
+			DisciplineId = e.DisciplineId,
+			Discount = e.Discount
+		});
+	}
+
 	public async Task<EnrollmentResponseDto> AddAsync(EnrollmentRequestDto enrollment)
 	{
 		var entity = new Enrollment

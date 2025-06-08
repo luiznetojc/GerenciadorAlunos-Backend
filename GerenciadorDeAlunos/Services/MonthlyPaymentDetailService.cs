@@ -36,6 +36,19 @@ public class MonthlyPaymentDetailService : IMonthlyPaymentDetailService
 		};
 	}
 
+	public async Task<IEnumerable<MonthlyPaymentDetailResponseDto>> GetByMonthlyPaymentIdAsync(int monthlyPaymentId)
+	{
+		var items = await _repository.GetByMonthlyPaymentIdAsync(monthlyPaymentId);
+		return items.Select(d => new MonthlyPaymentDetailResponseDto
+		{
+			Id = d.Id,
+			MonthlyPaymentId = d.MonthlyPaymentId,
+			EnrollmentId = d.EnrollmentId,
+			OriginalAmount = d.OriginalAmount,
+			DiscountAmount = d.DiscountAmount
+		});
+	}
+
 	public async Task<MonthlyPaymentDetailResponseDto> AddAsync(MonthlyPaymentDetailRequestDto detail)
 	{
 		var entity = new MonthlyPaymentDetail
