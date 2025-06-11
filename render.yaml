@@ -1,0 +1,41 @@
+# Configuração para deployment no Render
+services:
+  # Backend API
+  - type: web
+    name: gerenciador-alunos-backend
+    runtime: docker
+    plan: free # ou starter/standard conforme necessário
+    
+    # Build settings
+    buildCommand: docker build -t gerenciador-alunos-backend .
+    startCommand: docker run -p $PORT:$PORT gerenciador-alunos-backend
+    
+    # Environment variables
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gerenciador-alunos-db
+          property: connectionString
+      - key: ASPNETCORE_URLS
+        value: http://+:$PORT
+      - key: DOTNET_RUNNING_IN_CONTAINER
+        value: "true"
+        
+    # Health check
+    healthCheckPath: /health
+    
+    # Auto-deploy
+    autoDeploy: true
+    
+# Database (PostgreSQL)
+databases:
+  - name: gerenciador-alunos-db
+    databaseName: gerenciador_alunos
+    user: postgres
+    plan: free
+    region: oregon # ou região de sua preferência
+    
+    # Scripts de inicialização (opcional)
+    # initScript: ./scripts/init-db.sql

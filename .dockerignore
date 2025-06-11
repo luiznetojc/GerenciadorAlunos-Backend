@@ -1,0 +1,55 @@
+# .dockerignore para otimizar o build do Docker no Render
+
+# Arquivos de desenvolvimento e Git
+.git
+.gitignore
+.DS_Store
+.idea/
+.vscode/
+*.md
+README.md
+DEPLOY_RENDER.md
+
+# Arquivos de build/output (serão recriados)
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# Arquivos de configuração local (usar environment variables)
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+
+# Logs e cache
+logs/
+*.log
+*.tmp
+*.temp
+*~
+
+# Dependencies (serão restauradas)
+packages/
+node_modules/
+
+# IDE específicos
+.idea/
+*.sln.iml
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# Arquivos de teste
+**/TestResults/
+**/*.trx
+**/*.coverage
+
+# Docker relacionados (evitar recursão)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+docker-scripts.sh
+
+# Render específicos
+render.yaml
