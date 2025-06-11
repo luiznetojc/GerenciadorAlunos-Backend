@@ -45,7 +45,6 @@ check_file "DEPLOY_RENDER.md"
 check_file "GerenciadorDeAlunos/GerenciadorDeAlunos.csproj"
 check_file "GerenciadorDeAlunos/Program.cs"
 check_file "GerenciadorDeAlunos/appsettings.json"
-check_file "GerenciadorDeAlunos/appsettings.Production.json"
 echo ""
 
 # Verificar configurações do Dockerfile

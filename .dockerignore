@@ -6,20 +6,26 @@
 .DS_Store
 .idea/
 .vscode/
+
+# Documentação (não necessária no container)
 *.md
 README.md
 DEPLOY_RENDER.md
+RENDER_READY.md
 
-# Arquivos de build/output (serão recriados)
+# Arquivos de build/output (serão recriados durante o build)
 **/bin/
 **/obj/
 **/out/
 **/publish/
 
-# Arquivos de configuração local (usar environment variables)
+# Arquivos de configuração local (production usa environment variables)
 appsettings.Development.json
 appsettings.Local.json
 appsettings.*.local.json
+
+# IMPORTANTE: NÃO excluir appsettings.json e appsettings.Production.json
+# Estes são necessários para o funcionamento da aplicação
 
 # Logs e cache
 logs/
@@ -28,7 +34,7 @@ logs/
 *.temp
 *~
 
-# Dependencies (serão restauradas)
+# Dependencies que serão restauradas pelo Docker
 packages/
 node_modules/
 
@@ -40,16 +46,20 @@ node_modules/
 *.userosscache
 *.sln.docstates
 
-# Arquivos de teste
+# Arquivos de teste (não necessários em produção)
 **/TestResults/
 **/*.trx
 **/*.coverage
 
-# Docker relacionados (evitar recursão)
-Dockerfile
-.dockerignore
-docker-compose*.yml
+# Scripts locais (não necessários no container)
 docker-scripts.sh
+validate-render.sh
+deploy-render.sh
 
-# Render específicos
+# Arquivos Docker (evitar recursão e conflitos)
+# REMOVIDO: Dockerfile - NECESSÁRIO para o build!
+# REMOVIDO: .dockerignore - pode causar problemas
+docker-compose*.yml
+
+# Arquivos específicos do Render (não necessários no container)
 render.yaml

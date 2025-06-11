@@ -1,0 +1,41 @@
+# ===================================
+# CONFIGURAÇÕES DE SEGURANÇA - RENDER
+# ===================================
+
+# Arquivos com informações sensíveis
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+
+# Backup de arquivos com dados sensíveis
+*.bak
+*.backup
+*_backup.*
+
+# Logs que podem conter informações sensíveis
+logs/
+*.log
+**/*.log
+
+# Arquivos de configuração local específicos
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+
+# Certificados e chaves
+*.pfx
+*.p12
+*.key
+*.pem
+*.crt
+*.cer
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Render específicos
+render.yaml.local

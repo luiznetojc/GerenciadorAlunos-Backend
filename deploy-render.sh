@@ -23,6 +23,21 @@ if [ ! -f "Dockerfile" ] || [ ! -f "render.yaml" ]; then
     exit 1
 fi
 
+# Verificar se arquivos sensíveis estão sendo ignorados
+echo -e "${YELLOW}🔒 Verificando configuração de segurança...${NC}"
+if git check-ignore GerenciadorDeAlunos/appsettings.json >/dev/null 2>&1; then
+    echo -e "${GREEN}✅ appsettings.json está no .gitignore (seguro)${NC}"
+else
+    echo -e "${RED}⚠️  appsettings.json NÃO está no .gitignore!${NC}"
+    echo -e "${YELLOW}💡 Isso significa que dados sensíveis podem ser commitados${NC}"
+    echo -e "${YELLOW}❓ Continuar mesmo assim? (y/N)${NC}"
+    read -r response
+    if [[ ! "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        echo -e "${YELLOW}⏸️ Deploy cancelado para segurança${NC}"
+        exit 1
+    fi
+fi
+
 # Verificar status do Git
 echo -e "${YELLOW}📋 Verificando status do Git...${NC}"
 if ! git status &>/dev/null; then
