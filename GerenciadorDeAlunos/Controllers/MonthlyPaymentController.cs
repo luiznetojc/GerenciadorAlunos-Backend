@@ -57,6 +57,28 @@ public class MonthlyPaymentController : ControllerBase
 		return NoContent();
 	}
 
+	[HttpPut("{id}/mark-paid")]
+	public async Task<IActionResult> MarkAsPaid(int id)
+	{
+		var payment = await _service.GetByIdAsync(id);
+		if (payment == null) return NotFound();
+
+		var updateDto = new MonthlyPaymentRequestDto
+		{
+			StudentId = payment.StudentId,
+			Year = payment.Year,
+			Month = payment.Month,
+			TotalAmount = payment.TotalAmount,
+			IsPaid = true,
+			PaymentDate = DateTime.UtcNow,
+			DueDate = payment.DueDate
+		};
+
+		var updated = await _service.UpdateAsync(id, updateDto);
+		if (!updated) return NotFound();
+		return NoContent();
+	}
+
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> Delete(int id)
 	{

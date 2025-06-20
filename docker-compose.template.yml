@@ -1,5 +1,5 @@
 # Docker Compose para o Sistema de Gerenciamento de Alunos
-version: '3.8'
+version: "3.8"
 
 services:
   # Backend ASP.NET Core
@@ -27,7 +27,6 @@ services:
 networks:
   gerenciador-network:
     driver: bridge
-
 # Para uso futuro - PostgreSQL local (opcional)
 # Descomente se quiser usar PostgreSQL local em vez do Supabase
 #
