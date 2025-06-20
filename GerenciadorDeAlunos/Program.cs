@@ -30,8 +30,14 @@ builder.Services.AddCors(options =>
 	});
 });
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+// Configuração da string de conexão - prioriza variável de ambiente do Render
+var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") 
 	?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+	throw new InvalidOperationException("Connection string 'DefaultConnection' not found. Please configure it in Render environment variables or appsettings.json");
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 	options.UseNpgsql(connectionString));
