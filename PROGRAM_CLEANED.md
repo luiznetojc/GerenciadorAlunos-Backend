@@ -26,7 +26,7 @@ connectionString = ConvertDatabaseUrl(connectionString);
 
 ```
 Key: DATABASE_URL
-Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres?sslmode=require
+Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
 ```
 
 ## 📝 Logs esperados no Render:

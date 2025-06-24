@@ -25,9 +25,8 @@ static string ConvertDatabaseUrl(string databaseUrl)
 			password = userInfo.Length > 1 ? userInfo[1] : "";
 		}
 		
-		var sslMode = uri.Query.Contains("sslmode=require") ? "Require" : "Prefer";
-		
-		return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode={sslMode};Trust Server Certificate=true";
+		// Para Supabase, sempre usar SSL Mode=Require
+		return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
 	}
 	catch
 	{

@@ -41,7 +41,7 @@ Host=db.xxxxxxxx.supabase.co;Database=postgres;Username=postgres;Password=sua_se
 
 ### Para PostgreSQL (Formato URL - DATABASE_URL):
 ```
-postgresql://postgres:sua_senha@db.xxxxxxxx.supabase.co:5432/postgres?sslmode=require
+postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
 ```
 
 ## ✅ SOLUÇÃO: Como Configurar no Render
