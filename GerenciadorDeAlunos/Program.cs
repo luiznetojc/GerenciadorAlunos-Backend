@@ -1,5 +1,6 @@
 using GerenciadorDeAlunos;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 
 
@@ -20,13 +21,24 @@ builder.Services.AddCors(options =>
 		{
 			policy.WithOrigins("http://localhost:4200", "http://localhost:4201")
 				  .AllowAnyMethod()
-				  .AllowAnyHeader();
+				  .AllowAnyHeader()
+				  .AllowCredentials();
 		}
 		else
 		{
-			policy.AllowAnyOrigin()
-				  .AllowAnyMethod()
-				  .AllowAnyHeader();
+			policy.SetIsOriginAllowed(origin =>
+			{
+				if (string.IsNullOrEmpty(origin)) return false;
+				
+				// Permitir qualquer subdomínio do Vercel
+				var uri = new Uri(origin);
+				return uri.Host.EndsWith(".vercel.app") || 
+					   uri.Host.EndsWith("vercel.app") ||
+					   uri.Host == "localhost"; // Para testes locais
+			})
+			.AllowAnyMethod()
+			.AllowAnyHeader()
+			.AllowCredentials();
 		}
 	});
 });
@@ -65,6 +77,34 @@ builder.Services.AddScoped<GerenciadorDeAlunos.Services.IMonthlyBillingService, 
 
 var app = builder.Build();
 
+// Middleware de debug para CORS (apenas em produção para monitorar)
+if (app.Environment.IsProduction())
+{
+	app.Use(async (context, next) =>
+	{
+		var origin = context.Request.Headers["Origin"].FirstOrDefault();
+		Console.WriteLine($"[CORS DEBUG] Request from origin: {origin ?? "null"}");
+		
+		await next();
+		
+		var corsHeaders = context.Response.Headers.Where(h => h.Key.StartsWith("Access-Control-"));
+		foreach (var header in corsHeaders)
+		{
+			Console.WriteLine($"[CORS DEBUG] Response header: {header.Key} = {header.Value}");
+		}
+	});
+}
+
+// CORS deve vir antes de outros middlewares
+app.UseCors();
+
+// Headers de forwarding (importante para Render)
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+	ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
+					  | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
+
 // Swagger
 if (app.Environment.IsDevelopment())
 {
@@ -81,15 +121,6 @@ else
 	});
 }
 
-// Headers e CORS
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-	ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
-					  | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
-});
-
-app.UseCors();
-
 if (!app.Environment.IsProduction())
 {
 	app.UseHttpsRedirection();
@@ -101,5 +132,6 @@ app.MapControllers();
 
 // Log de inicialização
 Console.WriteLine($"[INFO] Gerenciador de Alunos API iniciada - Ambiente: {app.Environment.EnvironmentName}");
+Console.WriteLine($"[INFO] CORS configurado para aceitar origens *.vercel.app");
 
 app.Run();
