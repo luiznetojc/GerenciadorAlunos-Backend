@@ -6,13 +6,13 @@
 ✅ **Variável única**: Apenas `DATABASE_URL`  
 ✅ **URL específica**: A URL exata do seu Supabase  
 ✅ **Logs mínimos**: Apenas para verificar se a variável foi carregada  
-✅ **Sem complexidade desnecessária**  
+✅ **Sem complexidade desnecessária**
 
 ## 🔧 Configuração simplificada:
 
 ```csharp
 // Configuração da string de conexão
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
 	?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Log simples para verificar se a variável foi carregada
@@ -26,7 +26,7 @@ connectionString = ConvertDatabaseUrl(connectionString);
 
 ```
 Key: DATABASE_URL
-Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
+Value: postgresql://postgres:[YOUR-PASSWORD]@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
 ```
 
 ## 📝 Logs esperados no Render:

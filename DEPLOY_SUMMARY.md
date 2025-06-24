@@ -3,15 +3,18 @@
 ## 🎯 O QUE VOCÊ PRECISA FAZER
 
 ### 1. No Render Dashboard
+
 ```
 Key: DATABASE_URL
 Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres?sslmode=require
 ```
 
 ### 2. Fazer Deploy e Verificar Logs
+
 Procurar por: `[DEBUG] Database connection test: SUCCESS`
 
 ### 3. Testar Endpoints
+
 - `/health` - deve retornar status 200
 - `/health/detailed` - deve mostrar `"database": "connected"`
 
@@ -20,7 +23,7 @@ Procurar por: `[DEBUG] Database connection test: SUCCESS`
 ✅ `.env.production` - Variáveis para referência  
 ✅ `RENDER_SETUP_GUIDE.md` - Guia passo a passo  
 ✅ `DEBUG_RENDER_CONNECTION.md` - Guia de debugging  
-✅ Logs detalhados implementados no código  
+✅ Logs detalhados implementados no código
 
 ## 🔧 CÓDIGO ATUALIZADO
 
@@ -28,7 +31,7 @@ Procurar por: `[DEBUG] Database connection test: SUCCESS`
 ✅ Conversão automática PostgreSQL URL → .NET  
 ✅ Teste de conexão na inicialização  
 ✅ Health checks detalhados  
-✅ Logs de debug sem expor credenciais  
+✅ Logs de debug sem expor credenciais
 
 ## ⚡ PRÓXIMOS PASSOS
 

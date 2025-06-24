@@ -3,27 +3,32 @@
 ## 📋 PASSO A PASSO NO RENDER
 
 ### 1. Acesse o Render Dashboard
+
 - Vá para: https://dashboard.render.com
 - Selecione seu Web Service
 
 ### 2. Configure a Variável de Ambiente
+
 - Clique na aba **Environment**
 - Role até **Environment Variables** (não use Environment Groups)
 - Clique em **Add Environment Variable**
 
 ### 3. Adicione a Variável do Banco
+
 ```
 Key: DATABASE_URL
-Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
+Value: postgresql://postgres:[YOUR-PASSWORD]@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
 ```
 
 ### 4. Deploy
+
 - Clique em **Deploy Latest Commit**
 - Monitore os logs
 
 ## ✅ VERIFICAÇÃO
 
 ### Logs Esperados
+
 ```
 [DEBUG] Connection source: DATABASE_URL
 [DEBUG] Original format: PostgreSQL URL
@@ -34,11 +39,13 @@ Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:543
 ```
 
 ### Endpoints de Teste
+
 - **Health Check**: `https://sua-app.onrender.com/health`
 - **Status Detalhado**: `https://sua-app.onrender.com/health/detailed`
 - **API Docs**: `https://sua-app.onrender.com/swagger`
 
 ### Resposta de Sucesso (/health/detailed)
+
 ```json
 {
   "status": "healthy",
@@ -53,21 +60,27 @@ Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:543
 ### Se aparecer "FAILED" nos logs:
 
 **Erro de SSL:**
+
 ```
 [ERROR] SSL connection required
 ```
+
 **Solução**: Confirmar `?sslmode=require` na URL
 
 **Erro de Credenciais:**
+
 ```
 [ERROR] password authentication failed
 ```
+
 **Solução**: Verificar senha `@Leleco2025` no Supabase
 
 **Erro de Host:**
+
 ```
 [ERROR] could not translate host name
 ```
+
 **Solução**: Verificar ID do projeto `gkkemcwnvcpvnxialucj`
 
 ## 📁 ARQUIVOS DE REFERÊNCIA
@@ -81,4 +94,4 @@ Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:543
 ✅ Nunca commitar arquivos .env  
 ✅ Usar variáveis de ambiente no Render  
 ✅ SSL habilitado no Supabase  
-✅ Logs não expõem senhas  
+✅ Logs não expõem senhas

@@ -9,10 +9,16 @@
 # ARQUIVOS COM DADOS SENSÍVEIS
 # ===================================
 
-# Arquivos de configuração com credenciais REAIS (manter templates)
-# appsettings.json - permite versionamento com dados locais
-# appsettings.Production.json - permite versionamento sem dados sensíveis
+# Arquivos de configuração com credenciais (todos os appsettings)
+appsettings.json
 appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.*.json
+
+# Permitir templates (sem credenciais reais)
+!appsettings.template.json
+!appsettings.example.json
 
 # Docker compose com connection strings reais
 docker-compose.yml

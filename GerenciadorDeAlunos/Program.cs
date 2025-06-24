@@ -6,17 +6,17 @@ static string ConvertDatabaseUrl(string databaseUrl)
 {
 	if (string.IsNullOrEmpty(databaseUrl) || !databaseUrl.StartsWith("postgresql://"))
 		return databaseUrl;
-	
+
 	try
 	{
 		var uri = new Uri(databaseUrl);
 		var host = uri.Host;
 		var port = uri.Port > 0 ? uri.Port : 5432;
 		var database = uri.AbsolutePath.TrimStart('/');
-		
+
 		if (string.IsNullOrEmpty(database))
 			database = "postgres";
-		
+
 		string username = "", password = "";
 		if (!string.IsNullOrEmpty(uri.UserInfo))
 		{
@@ -24,7 +24,7 @@ static string ConvertDatabaseUrl(string databaseUrl)
 			username = userInfo[0];
 			password = userInfo.Length > 1 ? userInfo[1] : "";
 		}
-		
+
 		// Para Supabase, sempre usar SSL Mode=Require
 		return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
 	}
@@ -63,7 +63,7 @@ builder.Services.AddCors(options =>
 });
 
 // Configuração da string de conexão
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
 	?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))

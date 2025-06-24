@@ -1,3 +1,31 @@
+# ✅ CONFIGURAÇÃO FINAL CORRIGIDA
+
+## 🎯 Formato Correto da Connection String
+
+**No appsettings.json e appsettings.Production.json:**
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=db.gkkemcwnvcpvnxialucj.supabase.co;Database=postgres;Username=postgres;Password=[YOUR-PASSWORD];SSL Mode=Require;Trust Server Certificate=true"
+  }
+}
+```
+
+**Para variável de ambiente DATABASE_URL no Render:**
+
+```
+postgresql://postgres:[YOUR-PASSWORD]@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres
+```
+
+## ⚠️ IMPORTANTE:
+
+- **Substitua `[YOUR-PASSWORD]` pela senha real do seu projeto Supabase**
+- **Nunca deixe `[YOUR-PASSWORD]` no código - é só um placeholder**
+- **O ID do projeto já está correto: `gkkemcwnvcpvnxialucj`**
+
+---
+
 # 🔐 Configuração Local - Dados Sensíveis
 
 ## 📋 Arquivos Ignorados pelo Git
