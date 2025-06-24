@@ -1,38 +1,7 @@
 using GerenciadorDeAlunos;
 using Microsoft.EntityFrameworkCore;
 
-// Método para converter DATABASE_URL PostgreSQL para .NET Connection String
-static string ConvertDatabaseUrl(string databaseUrl)
-{
-	if (string.IsNullOrEmpty(databaseUrl) || !databaseUrl.StartsWith("postgresql://"))
-		return databaseUrl;
 
-	try
-	{
-		var uri = new Uri(databaseUrl);
-		var host = uri.Host;
-		var port = uri.Port > 0 ? uri.Port : 5432;
-		var database = uri.AbsolutePath.TrimStart('/');
-
-		if (string.IsNullOrEmpty(database))
-			database = "postgres";
-
-		string username = "", password = "";
-		if (!string.IsNullOrEmpty(uri.UserInfo))
-		{
-			var userInfo = uri.UserInfo.Split(':');
-			username = userInfo[0];
-			password = userInfo.Length > 1 ? userInfo[1] : "";
-		}
-
-		// Para Supabase, sempre usar SSL Mode=Require
-		return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
-	}
-	catch
-	{
-		return databaseUrl;
-	}
-}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,18 +33,15 @@ builder.Services.AddCors(options =>
 
 // Configuração da string de conexão
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-	?? builder.Configuration.GetConnectionString("DefaultConnection");
+	?? builder.Configuration["DefaultConnection"];
+Console.WriteLine($"[INFO] Database URL configured: {connectionString}");
 
 if (string.IsNullOrEmpty(connectionString))
 {
 	throw new InvalidOperationException("DATABASE_URL not found. Configure it in Render environment variables.");
 }
 
-// Log simples para verificar se a variável foi carregada
-Console.WriteLine($"[INFO] Database URL configured: {!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL"))}");
 
-// Converter para formato .NET se necessário
-connectionString = ConvertDatabaseUrl(connectionString);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 	options.UseNpgsql(connectionString));
