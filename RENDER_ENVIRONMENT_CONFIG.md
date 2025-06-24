@@ -1,33 +1,79 @@
 # Configuração de Variáveis de Ambiente no Render
 
+# Configuração de Variáveis de Ambiente no Render
+
 ## Variáveis Obrigatórias no Render Dashboard
 
 No painel do Render, vá para seu serviço e adicione as seguintes variáveis em:
 **Environment** → **Environment Variables**
 
-### 1. String de Conexão do Banco
+### Opção 1: DATABASE_URL (Recomendado pelo Render)
+```
+Nome: DATABASE_URL
+Valor: postgresql://usuario:senha@host:porta/database?sslmode=require
+```
+
+### Opção 2: DefaultConnection (Formato .NET)
 ```
 Nome: DefaultConnection
 Valor: Host=seu_host;Database=seu_database;Username=seu_user;Password=sua_senha;SSL Mode=Require;Trust Server Certificate=true
 ```
 
-### 2. Porta (opcional - Render gerencia automaticamente)
+### Opção 3: CONNECTION_STRING (Alternativa)
 ```
-Nome: PORT
-Valor: (gerenciado pelo Render)
-```
-
-### 3. Ambiente
-```
-Nome: ASPNETCORE_ENVIRONMENT
-Valor: Production
+Nome: CONNECTION_STRING
+Valor: Host=seu_host;Database=seu_database;Username=seu_user;Password=sua_senha;SSL Mode=Require;Trust Server Certificate=true
 ```
 
-## String de Conexão do Supabase (exemplo)
-Para o Supabase, a string segue este formato:
+## Variáveis Automáticas do Render
+O Render define automaticamente:
 ```
-Host=db.XXXXXXXXXXXXXXXX.supabase.co;Database=postgres;Username=postgres;Password=SUA_SENHA;SSL Mode=Require;Trust Server Certificate=true
+PORT - Porta da aplicação (gerenciado automaticamente)
+RENDER - indica que está rodando no Render
 ```
+
+## Formato da String de Conexão
+
+### Para PostgreSQL/Supabase (Formato .NET):
+```
+Host=db.xxxxxxxx.supabase.co;Database=postgres;Username=postgres;Password=sua_senha;SSL Mode=Require;Trust Server Certificate=true
+```
+
+### Para PostgreSQL (Formato URL - DATABASE_URL):
+```
+postgresql://postgres:sua_senha@db.xxxxxxxx.supabase.co:5432/postgres?sslmode=require
+```
+
+## ✅ SOLUÇÃO: Como Configurar no Render
+
+### PASSO 1: No Render Dashboard
+1. Vá para seu Web Service
+2. Clique na aba **Environment**
+3. Role até **Environment Variables** (NÃO use Environment Groups)
+4. Clique em **Add Environment Variable**
+
+### PASSO 2: Adicione UMA das opções abaixo:
+
+**OPÇÃO A - DATABASE_URL (Recomendado):**
+```
+Key: DATABASE_URL
+Value: postgresql://postgres:@Leleco2025@db.gkkemcwnvcpvnxialucj.supabase.co:5432/postgres?sslmode=require
+```
+
+**OPÇÃO B - DefaultConnection:**
+```
+Key: DefaultConnection
+Value: Host=db.gkkemcwnvcpvnxialucj.supabase.co;Database=postgres;Username=postgres;Password=@Leleco2025;SSL Mode=Require;Trust Server Certificate=true
+```
+
+### PASSO 3: Deploy
+Após adicionar a variável, clique em **Deploy Latest Commit**
+
+## ⚠️ IMPORTANTE
+- **NÃO use Environment Groups**
+- **Use apenas Environment Variables direto no serviço**
+- **Escolha apenas UMA das opções acima**
+- **O sistema agora suporta ambos os formatos automaticamente**
 
 ## Configuração Local para Desenvolvimento
 

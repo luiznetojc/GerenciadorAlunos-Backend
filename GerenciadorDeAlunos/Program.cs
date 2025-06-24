@@ -1,5 +1,6 @@
 using GerenciadorDeAlunos;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,13 +31,44 @@ builder.Services.AddCors(options =>
 	});
 });
 
-// Configuração da string de conexão - prioriza variável de ambiente do Render
-var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") 
+// Configuração da string de conexão - múltiplas opções para Render
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+	?? Environment.GetEnvironmentVariable("DefaultConnection")
+	?? Environment.GetEnvironmentVariable("CONNECTION_STRING")
 	?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-	throw new InvalidOperationException("Connection string 'DefaultConnection' not found. Please configure it in Render environment variables or appsettings.json");
+	throw new InvalidOperationException("Connection string not found. Please configure DATABASE_URL or DefaultConnection in Render environment variables.");
+}
+
+// Converter DATABASE_URL para formato .NET se necessário
+connectionString = ConvertDatabaseUrl(connectionString);
+
+// Log para debug (sem expor a senha)
+Console.WriteLine($"Using connection string: {(connectionString.Contains("Password") ? "***CONNECTION SET***" : connectionString)}");
+
+// Método para converter DATABASE_URL em connection string .NET
+static string ConvertDatabaseUrl(string databaseUrl)
+{
+	if (string.IsNullOrEmpty(databaseUrl) || !databaseUrl.StartsWith("postgresql://"))
+		return databaseUrl;
+	
+	try
+	{
+		var uri = new Uri(databaseUrl);
+		var host = uri.Host;
+		var port = uri.Port;
+		var database = uri.AbsolutePath.TrimStart('/');
+		var username = uri.UserInfo.Split(':')[0];
+		var password = uri.UserInfo.Split(':')[1];
+		
+		return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+	}
+	catch
+	{
+		return databaseUrl; // Se falhar, retorna o original
+	}
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
