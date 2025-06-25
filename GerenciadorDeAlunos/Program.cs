@@ -46,7 +46,7 @@ builder.Services.AddCors(options =>
 // Configuração da string de conexão
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
 	?? builder.Configuration["DefaultConnection"] ?? string.Empty;
-
+Console.WriteLine($"[INFO] Usando string de conexão: {connectionString}");
 Console.WriteLine($"[INFO] Database connection configured from: {(Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "DATABASE_URL environment variable" : "appsettings")}");
 
 if (string.IsNullOrEmpty(connectionString))
@@ -65,7 +65,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 			maxRetryCount: 5,
 			maxRetryDelay: TimeSpan.FromSeconds(30),
 			errorCodesToAdd: null);
-		
+
 		// Timeout aumentado para conexões lentas no Render
 		npgsqlOptions.CommandTimeout(300);
 	});
@@ -76,7 +76,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 		options.EnableSensitiveDataLogging();
 		options.LogTo(Console.WriteLine);
 	}
-	
+
 	// Em produção, log apenas erros críticos
 	if (builder.Environment.IsProduction())
 	{
