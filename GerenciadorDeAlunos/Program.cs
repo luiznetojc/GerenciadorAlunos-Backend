@@ -44,15 +44,21 @@ builder.Services.AddCors(options =>
 });
 
 // Configuração da string de conexão
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-	?? builder.Configuration["DefaultConnection"] ?? string.Empty;
-Console.WriteLine($"[INFO] Usando string de conexão: {connectionString}");
-Console.WriteLine($"[INFO] Database connection configured from: {(Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "DATABASE_URL environment variable" : "appsettings")}");
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-	throw new InvalidOperationException("DATABASE_URL not found. Configure it in Render environment variables.");
+	// Fallback para appsettings se DATABASE_URL não estiver definida
+	connectionString = builder.Configuration["DefaultConnection"];
 }
+
+if (string.IsNullOrEmpty(connectionString))
+{
+	throw new InvalidOperationException("DATABASE_URL not found. Configure it in Render environment variables with Session Pooler format.");
+}
+
+Console.WriteLine($"[INFO] Database connection configured from: {(Environment.GetEnvironmentVariable("DATABASE_URL") != null ? "DATABASE_URL environment variable" : "appsettings")}");
+Console.WriteLine($"[INFO] Using Session Pooler connection string");
 
 
 
@@ -60,14 +66,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
 	options.UseNpgsql(connectionString, npgsqlOptions =>
 	{
-		// Configurações específicas para Render + Supabase
+		// Configurações otimizadas para Session Pooler do Supabase
 		npgsqlOptions.EnableRetryOnFailure(
-			maxRetryCount: 5,
+			maxRetryCount: 3,
 			maxRetryDelay: TimeSpan.FromSeconds(30),
 			errorCodesToAdd: null);
 
-		// Timeout aumentado para conexões lentas no Render
-		npgsqlOptions.CommandTimeout(300);
+		// Timeout otimizado para Session Pooler
+		npgsqlOptions.CommandTimeout(120);
 	});
 
 	// Log SQL queries em desenvolvimento
